@@ -11,4 +11,8 @@ void loop() {
   if (M5.BtnA.wasPressed()) {
     M5.Lcd.fillScreen(WHITE);
   }
+
+  if (M5.BtnB.wasPressed()) {
+    M5.Lcd.fillScreen(BLACK);
+  }
 }
