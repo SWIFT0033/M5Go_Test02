@@ -3,6 +3,7 @@
 const uint8_t NORMAL_BRIGHTNESS = 255;
 const uint8_t MINIMUM_BRIGHTNESS = 0;
 const uint8_t SPEAKER_VOLUME = 7;
+const uint32_t BUTTON_A_LONG_PRESS_MS = 1000;
 
 void drawCreeperFace() {
   const uint16_t creeperGreen = M5.Lcd.color565(70, 170, 60);
@@ -80,6 +81,45 @@ void drawEnderDragonFace() {
   M5.Lcd.fillRect(128, 200, 64, 24, dragonScale);
 }
 
+void drawWardenFullBody() {
+  const uint16_t caveBlack = M5.Lcd.color565(5, 12, 16);
+  const uint16_t wardenDark = M5.Lcd.color565(18, 48, 54);
+  const uint16_t wardenTeal = M5.Lcd.color565(20, 95, 100);
+  const uint16_t sculkBlue = M5.Lcd.color565(20, 165, 175);
+  const uint16_t hornBone = M5.Lcd.color565(170, 200, 185);
+
+  M5.Lcd.setBrightness(NORMAL_BRIGHTNESS);
+  M5.Lcd.fillScreen(caveBlack);
+
+  // Horns and head.
+  M5.Lcd.fillRect(60, 16, 40, 12, hornBone);
+  M5.Lcd.fillRect(76, 28, 40, 16, wardenTeal);
+  M5.Lcd.fillRect(220, 16, 40, 12, hornBone);
+  M5.Lcd.fillRect(204, 28, 40, 16, wardenTeal);
+  M5.Lcd.fillRect(108, 20, 104, 64, wardenDark);
+  M5.Lcd.fillRect(128, 48, 64, 20, sculkBlue);
+  M5.Lcd.fillRect(144, 52, 32, 12, caveBlack);
+
+  // Torso, glowing rib cage, and heart.
+  M5.Lcd.fillRect(96, 84, 128, 96, wardenDark);
+  M5.Lcd.fillRect(112, 96, 96, 12, wardenTeal);
+  M5.Lcd.fillRect(112, 120, 96, 12, wardenTeal);
+  M5.Lcd.fillRect(112, 144, 96, 12, wardenTeal);
+  M5.Lcd.fillRect(132, 92, 12, 68, sculkBlue);
+  M5.Lcd.fillRect(176, 92, 12, 68, sculkBlue);
+  M5.Lcd.fillRect(148, 116, 24, 24, sculkBlue);
+
+  // Long arms and legs complete the full-body silhouette.
+  M5.Lcd.fillRect(48, 84, 48, 112, wardenDark);
+  M5.Lcd.fillRect(224, 84, 48, 112, wardenDark);
+  M5.Lcd.fillRect(40, 176, 56, 28, wardenTeal);
+  M5.Lcd.fillRect(224, 176, 56, 28, wardenTeal);
+  M5.Lcd.fillRect(108, 180, 44, 60, wardenDark);
+  M5.Lcd.fillRect(168, 180, 44, 60, wardenDark);
+  M5.Lcd.fillRect(100, 224, 52, 16, wardenTeal);
+  M5.Lcd.fillRect(168, 224, 52, 16, wardenTeal);
+}
+
 void playCreeperSound() {
   const uint16_t frequencies[] = {
       6400, 5200, 7000, 5800, 6600, 4800, 420, 330, 250, 180, 110};
@@ -128,6 +168,7 @@ void setup() {
 
 void loop() {
   static bool buttonComboHandled = false;
+  static bool buttonALongHandled = false;
 
   M5.update();
 
@@ -136,6 +177,7 @@ void loop() {
     M5.Lcd.fillScreen(BLACK);
     M5.Lcd.setBrightness(MINIMUM_BRIGHTNESS);
     buttonComboHandled = false;
+    buttonALongHandled = false;
     return;
   }
 
@@ -155,7 +197,18 @@ void loop() {
     buttonComboHandled = false;
   }
 
+  if (!btnADown) {
+    buttonALongHandled = false;
+  }
+
   if (buttonComboHandled) {
+    return;
+  }
+
+  if (btnADown && !btnBDown && !buttonALongHandled &&
+      M5.BtnA.pressedFor(BUTTON_A_LONG_PRESS_MS)) {
+    drawWardenFullBody();
+    buttonALongHandled = true;
     return;
   }
 

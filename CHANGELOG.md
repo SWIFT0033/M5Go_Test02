@@ -2,6 +2,12 @@
 
 M5Go_Test02の主な変更内容と確認結果を記録します。新しい履歴を上に追加します。
 
+## 2026-09-13 - BtnA長押しウォーデン表示
+
+- Summary: BtnAを約1秒長押しすると、画面全体にウォーデンの全身ピクセルアートを表示する機能を追加。BtnA短押しとBtnA＋BtnB同時押しを維持。
+- Files: `M5Go_Test02.ino`, `README.md`, `CHANGELOG.md`
+- Verification: `esp32:esp32:m5stack-core-esp32` 向けArduino CLIコンパイル成功。
+
 ## 2026-09-13 - GitHub更新管理
 
 - Summary: スケッチ変更時にREADME、CHANGELOG、コミット本文へ更新内容を記録し、GitHubへ反映するプロジェクトルールを追加。
