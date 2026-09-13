@@ -15,4 +15,8 @@ void loop() {
   if (M5.BtnB.wasPressed()) {
     M5.Lcd.fillScreen(BLACK);
   }
+
+  if (M5.BtnC.wasPressed()) {
+    M5.Lcd.fillScreen(RED);
+  }
 }

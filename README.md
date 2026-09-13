@@ -7,6 +7,7 @@ Codexを使ったArduino開発とGit/GitHub管理の流れを練習するため�
 - 電源ON時に画面全体を黒にします。
 - BtnAを押すと画面全体を白にします。
 - BtnBを押すと画面全体を黒に戻します。
+- BtnCを押すと画面全体を赤にします。
 - M5Stackライブラリを使用します。
 
 ## ビルド
@@ -19,3 +20,7 @@ arduino-cli compile --fqbn esp32:esp32:m5stack-core-esp32 "C:\Users\tatsuya\Desk
 ```
 
 書き込みは、接続中のM5GOのポートを確認してから実行します。このプロジェクト作成時点では書き込みもGitHubへのpushも行いません。
+
+## History
+
+- BtnCを押すと画面全体を赤にする機能を追加しました。
