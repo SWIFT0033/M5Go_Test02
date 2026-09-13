@@ -23,6 +23,8 @@ arduino-cli compile --fqbn esp32:esp32:m5stack-core-esp32 "C:\Users\tatsuya\Desk
 
 書き込みは、接続中のM5GOのポートを確認してから実行します。このプロジェクト作成時点では書き込みもGitHubへのpushも行いません。
 
+詳細な更新記録は [CHANGELOG.md](CHANGELOG.md) を参照してください。
+
 ## History
 
 - BtnAとBtnBの同時押しに、エンダードラゴンの表示と専用効果音を追加しました。
