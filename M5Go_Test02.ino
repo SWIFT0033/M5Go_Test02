@@ -50,6 +50,36 @@ void drawEndermanFace() {
   M5.Lcd.fillRect(184, 100, 48, 24, eyeGlow);
 }
 
+void drawEnderDragonFace() {
+  const uint16_t dragonBlack = M5.Lcd.color565(10, 4, 16);
+  const uint16_t dragonPurple = M5.Lcd.color565(55, 18, 75);
+  const uint16_t dragonScale = M5.Lcd.color565(90, 35, 115);
+  const uint16_t dragonEye = M5.Lcd.color565(220, 70, 255);
+  const uint16_t dragonGlow = M5.Lcd.color565(255, 170, 255);
+
+  M5.Lcd.setBrightness(NORMAL_BRIGHTNESS);
+  M5.Lcd.fillScreen(dragonPurple);
+
+  // Horns and a large blocky dragon head.
+  M5.Lcd.fillRect(24, 0, 48, 72, dragonBlack);
+  M5.Lcd.fillRect(248, 0, 48, 72, dragonBlack);
+  M5.Lcd.fillRect(48, 24, 224, 184, dragonBlack);
+  M5.Lcd.fillRect(16, 56, 48, 64, dragonBlack);
+  M5.Lcd.fillRect(256, 56, 48, 64, dragonBlack);
+
+  // Scales, glowing eyes, and the dragon's snout.
+  M5.Lcd.fillRect(112, 32, 40, 32, dragonScale);
+  M5.Lcd.fillRect(168, 32, 40, 32, dragonScale);
+  M5.Lcd.fillRect(72, 80, 72, 40, dragonEye);
+  M5.Lcd.fillRect(176, 80, 72, 40, dragonEye);
+  M5.Lcd.fillRect(112, 88, 32, 24, dragonGlow);
+  M5.Lcd.fillRect(176, 88, 32, 24, dragonGlow);
+  M5.Lcd.fillRect(80, 144, 160, 80, dragonBlack);
+  M5.Lcd.fillRect(112, 160, 24, 24, dragonPurple);
+  M5.Lcd.fillRect(184, 160, 24, 24, dragonPurple);
+  M5.Lcd.fillRect(128, 200, 64, 24, dragonScale);
+}
+
 void playCreeperSound() {
   const uint16_t frequencies[] = {
       6400, 5200, 7000, 5800, 6600, 4800, 420, 330, 250, 180, 110};
@@ -76,6 +106,19 @@ void playEndermanSound() {
   M5.Speaker.mute();
 }
 
+void playEnderDragonSound() {
+  const uint16_t frequencies[] = {
+      2800, 2250, 3200, 1900, 1450, 1100, 820, 610, 430, 300, 210, 140};
+  const uint16_t durations[] = {80, 70, 90, 70, 80, 90, 90, 100, 110, 120, 130, 180};
+
+  for (size_t i = 0; i < sizeof(frequencies) / sizeof(frequencies[0]); ++i) {
+    M5.Speaker.tone(frequencies[i]);
+    delay(durations[i]);
+  }
+
+  M5.Speaker.mute();
+}
+
 void setup() {
   M5.begin();
   M5.Speaker.setVolume(SPEAKER_VOLUME);
@@ -84,20 +127,43 @@ void setup() {
 }
 
 void loop() {
+  static bool buttonComboHandled = false;
+
   M5.update();
+
+  if (M5.BtnC.wasPressed()) {
+    M5.Speaker.mute();
+    M5.Lcd.fillScreen(BLACK);
+    M5.Lcd.setBrightness(MINIMUM_BRIGHTNESS);
+    buttonComboHandled = false;
+    return;
+  }
+
+  const bool btnADown = M5.BtnA.isPressed();
+  const bool btnBDown = M5.BtnB.isPressed();
+
+  if (btnADown && btnBDown) {
+    if (!buttonComboHandled) {
+      drawEnderDragonFace();
+      playEnderDragonSound();
+      buttonComboHandled = true;
+    }
+    return;
+  }
+
+  if (!btnADown && !btnBDown) {
+    buttonComboHandled = false;
+  }
+
+  if (buttonComboHandled) {
+    return;
+  }
 
   if (M5.BtnA.wasPressed()) {
     drawCreeperFace();
     playCreeperSound();
-  }
-
-  if (M5.BtnB.wasPressed()) {
+  } else if (M5.BtnB.wasPressed()) {
     drawEndermanFace();
     playEndermanSound();
-  }
-
-  if (M5.BtnC.wasPressed()) {
-    M5.Lcd.fillScreen(BLACK);
-    M5.Lcd.setBrightness(MINIMUM_BRIGHTNESS);
   }
 }
